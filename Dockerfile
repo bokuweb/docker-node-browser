@@ -12,11 +12,16 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
     libcap-dev libxtst-dev \
     gcc-multilib g++-multilib python3 python3-pip fonts-migmix && apt-get clean
 
-# Install node
-RUN wget http://nodejs.org/dist/v10.15.1/node-v10.15.1.tar.gz && \
-  tar -zxvf node-v10.15.1.tar.gz && \
-  cd node-v10.15.1 && ./configure && make && \
-  make install
+RUN apt update \
+ && apt install -y \
+    curl \
+    gnupg \
+    gcc \
+    g++ \
+    make \
+ && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+ && apt install -y nodejs \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY ./xvfbd /usr/local/bin
 RUN chmod 755 /usr/local/bin/xvfbd
